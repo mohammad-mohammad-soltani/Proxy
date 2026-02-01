@@ -1,0 +1,14 @@
+name: School-Proxy
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Start Proxy
+        run: |
+          docker run -d -p 443:443 --name mtp-server -e SECRET=ee00000000000000000000000000000000 telegrammessenger/proxy:latest
+          wget https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64.deb
+          sudo dpkg -i cloudflared-linux-amd64.deb
+          cloudflared tunnel --url tcp://localhost:443
